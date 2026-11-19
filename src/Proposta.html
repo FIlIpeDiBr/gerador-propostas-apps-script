@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proposta de Honorários Contábeis — <?= marca.nome ?></title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --accent: #2a5d8f;
+    --accent-deep: #1d4469;
+    --accent-tint: #eef3f8;
+    --accent-tint-2: #e1eaf3;
+    --ink: #18313e;
+    --ink-soft: #2c4451;
+    --body: #4a5660;
+    --muted: #818d92;
+    --bg: #f7f7f4;
+    --surface: #ffffff;
+    --line: #e7e8e2;
+    --line-soft: #eef0ea;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow-sm: 0 1px 2px rgba(24, 49, 62, .04), 0 1px 3px rgba(24, 49, 62, .05);
+    --shadow-md: 0 4px 16px rgba(24, 49, 62, .06), 0 1px 4px rgba(24, 49, 62, .05);
+    --shadow-lg: 0 18px 48px rgba(29, 68, 105, .14), 0 4px 14px rgba(24, 49, 62, .08);
+    --maxw: 880px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Libre Franklin", system-ui, sans-serif;
+    color: var(--body);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .doc {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+
+  /* ---------- Typography helpers ---------- */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  h2.section-title {
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(24px, 3.4vw, 31px);
+    color: var(--ink);
+    letter-spacing: -.01em;
+    line-height: 1.15;
+    margin: 14px 0 0;
+  }
+
+  .section-intro {
+    margin-top: 12px;
+    max-width: 60ch;
+    color: var(--body);
+  }
+
+  section.block { padding: 52px 0; border-top: 1px solid var(--line); }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    background:
+      radial-gradient(120% 90% at 88% -10%, rgba(42,93,143,.10), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #fbfcfa 100%);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
+  }
+  .cover-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 40px 24px 56px;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-bottom: 34px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cover-top .logo-img { height: 64px; width: auto; display: block; }
+  .cover-meta {
+    text-align: right;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .cover-meta strong { color: var(--ink-soft); font-weight: 600; }
+
+  .cover-body { padding-top: 46px; }
+  .cover h1 {
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(34px, 6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    margin: 18px 0 0;
+    text-wrap: balance;
+  }
+  .cover-sub {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    background: var(--accent-tint);
+    border: 1px solid var(--accent-tint-2);
+    padding: 7px 14px;
+    border-radius: 999px;
+  }
+  .cover-client {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 56px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+  }
+  .field-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .cover-client .client-name {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .cover-client .client-name span { display: block; font-size: 14px; font-family: "Libre Franklin"; color: var(--body); margin-top: 4px; }
+  .cover-client .field-val { font-size: 16px; color: var(--ink-soft); font-weight: 500; }
+
+  /* ---------- Sobre ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    align-items: start;
+    margin-top: 24px;
+  }
+  .about-text p { margin-bottom: 14px; color: var(--body); }
+  .about-text p:last-child { margin-bottom: 0; }
+  .stats {
+    display: grid;
+    gap: 14px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat .num {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 30px;
+    color: var(--accent-deep);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat .lbl { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  /* ---------- Bullet list (objetivo) ---------- */
+  .obj-list { list-style: none; margin-top: 26px; display: grid; gap: 14px; }
+  .obj-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+  .obj-list li .dot {
+    flex: none;
+    margin-top: 8px;
+    width: 7px; height: 7px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  /* ---------- Escopo (icon grid) ---------- */
+  .scope-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .scope-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .scope-icon {
+    flex: none;
+    width: 42px; height: 42px;
+    border-radius: 9px;
+    background: var(--accent-tint);
+    display: grid;
+    place-items: center;
+    color: var(--accent-deep);
+  }
+  .scope-icon svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .scope-item h4 { font-size: 15.5px; color: var(--ink); font-weight: 700; margin-bottom: 2px; }
+  .scope-item p { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+
+  /* ---------- Investimento ---------- */
+  .invest { 
+    background: linear-gradient(165deg, var(--accent-deep) 0%, var(--accent) 100%);
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin-top: 30px;
+    color: #fff;
+  }
+  .invest-hero {
+    padding: 40px 40px 34px;
+    position: relative;
+  }
+  .invest-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(90% 140% at 100% 0%, rgba(255,255,255,.12), transparent 55%);
+    pointer-events: none;
+  }
+  .invest-hero .label {
+    font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(255,255,255,.72);
+  }
+  .invest-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .invest-amount .cur { font-size: 24px; font-weight: 600; color: rgba(255,255,255,.8); }
+  .invest-amount .val {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: clamp(48px, 9vw, 76px);
+    font-weight: 600;
+    line-height: .95;
+    letter-spacing: -.02em;
+  }
+  .invest-amount .per { font-size: 16px; color: rgba(255,255,255,.78); font-weight: 500; }
+  .invest-hero .note { margin-top: 12px; font-size: 13.5px; color: rgba(255,255,255,.72); }
+
+  .invest-breakdown {
+    background: var(--surface);
+    color: var(--body);
+    padding: 12px 40px 16px;
+  }
+  .invest-breakdown .bd-title {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 18px 0 6px;
+  }
+  .bd-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .bd-row .bd-name { color: var(--ink-soft); font-size: 15px; }
+  .bd-row .bd-name small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
+  .bd-row .bd-val { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ink); font-size: 15.5px; white-space: nowrap; }
+  .bd-row.muted .bd-val { color: var(--muted); font-weight: 500; }
+  .bd-row.total {
+    border-top: 2px solid var(--ink);
+    margin-top: 6px;
+    padding: 20px 0 6px;
+  }
+  .bd-row.total .bd-name { font-family: "Newsreader", serif; font-size: 19px; color: var(--ink); font-weight: 600; }
+  .bd-row.total .bd-val { font-size: 24px; color: var(--accent-deep); font-weight: 800; }
+
+  /* ---------- Tabela de faixas de faturamento ---------- */
+  .faixas { margin-top: 28px; }
+  .faixas-head { margin-bottom: 14px; }
+  .faixas-title { font-family: "Newsreader", serif; font-size: 19px; font-weight: 600; color: var(--ink); }
+  .faixas-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .faixas-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-size: 14.5px;
+  }
+  .faixas-table thead th {
+    background: var(--ink);
+    color: #fff;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+  }
+  .faixas-table th.ta-r, .faixas-table td.ta-r { text-align: right; }
+  .faixas-table tbody td {
+    padding: 11px 18px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .faixas-table tbody tr:nth-child(even) td { background: #fafbf8; }
+  .faixas-table .ate { color: var(--muted); font-size: 13px; }
+  .faixas-table tr.faixa-atual td {
+    background: var(--accent-tint) !important;
+    color: var(--accent-deep);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .faixa-badge {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 2px 8px;
+    border-radius: 99px;
+    vertical-align: middle;
+  }
+  .faixas-foot { font-size: 12.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+
+  /* ---------- Formato (steps) ---------- */
+  .steps { margin-top: 30px; display: grid; gap: 16px; }
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 22px;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+  .step .step-n {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--accent);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent-tint-2);
+    background: var(--accent-tint);
+    display: grid;
+    place-items: center;
+    line-height: 1;
+  }
+  .step h4 { font-size: 16.5px; color: var(--ink); font-weight: 700; margin-bottom: 4px; }
+  .step p { font-size: 14px; color: var(--body); }
+
+  /* ---------- Condições (grid) ---------- */
+  .cond-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .cond-cell {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  .cond-cell:nth-child(2n) { border-right: none; }
+  .cond-cell:nth-last-child(-n+2):nth-child(odd),
+  .cond-cell:last-child { border-bottom: none; }
+  .cond-cell .field-label { color: var(--accent-deep); }
+  .cond-cell .cond-val { font-size: 16px; color: var(--ink); font-weight: 600; margin-top: 2px; }
+  .cond-cell .cond-desc { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ---------- Dados do cliente ---------- */
+  .data-table {
+    margin-top: 26px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .data-row {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row .dk {
+    background: #fbfcfa;
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-right: 1px solid var(--line-soft);
+  }
+  .data-row .dv { padding: 16px 24px; font-size: 16px; color: var(--ink); font-weight: 500; }
+
+  /* ---------- Observações ---------- */
+  .obs-box {
+    margin-top: 24px;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+    background: #fbfcfa;
+    padding: 26px 28px;
+    min-height: 110px;
+    color: var(--muted);
+    font-size: 15px;
+    font-style: italic;
+  }
+
+  /* ---------- Aceite ---------- */
+  .accept {
+    margin-top: 30px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 44px 40px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+  }
+  .accept h3 {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .accept p { max-width: 52ch; margin: 0 auto 26px; color: var(--body); font-size: 15px; }
+  .btn {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    padding: 17px 40px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(42,93,143,.28);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover { background: var(--accent-deep); transform: translateY(-2px); box-shadow: 0 14px 30px rgba(42,93,143,.34); }
+  .btn:active { transform: translateY(0); }
+  .accept .small { margin-top: 16px; margin-bottom: 0; font-size: 12.5px; color: var(--muted); }
+
+  .accepted {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .accepted .check {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    display: grid; place-items: center;
+    margin-bottom: 8px;
+  }
+  .accepted .check svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .accepted h3 { margin-bottom: 4px; }
+  .accepted .who { font-size: 15px; color: var(--ink-soft); font-weight: 600; }
+  .accepted .when { font-size: 13.5px; color: var(--muted); }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(24, 49, 62, .5);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 50;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .modal-overlay.open { display: flex; opacity: 1; }
+  .modal {
+    background: var(--surface);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 440px;
+    padding: 34px 34px 30px;
+    box-shadow: 0 30px 70px rgba(24,49,62,.35);
+    transform: translateY(12px) scale(.98);
+    transition: transform .2s ease;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal h3 {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 23px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .modal .modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .form-field { margin-bottom: 18px; }
+  .form-field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 7px;
+  }
+  .form-field input {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    padding: 13px 15px;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: #fbfcfa;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .form-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(42,93,143,.12);
+  }
+  .form-field .err { display: none; font-size: 12.5px; color: #c0392b; margin-top: 6px; font-weight: 500; }
+  .form-field.invalid .err { display: block; }
+  .form-field.invalid input { border-color: #c0392b; }
+  .modal-actions { display: flex; gap: 12px; margin-top: 26px; }
+  .modal-actions .btn { flex: 1; padding: 15px; box-shadow: none; }
+  .modal-actions .btn-ghost {
+    flex: none;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--line);
+    box-shadow: none;
+    padding: 15px 22px;
+  }
+  .modal-actions .btn-ghost:hover { background: #f4f5f1; color: var(--ink); transform: none; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--ink);
+    color: rgba(255,255,255,.82);
+  }
+  .footer-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 44px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .footer-brand { font-family: "Newsreader", serif; font-size: 22px; color: #fff; font-weight: 500; }
+  .footer-brand .tag { display: block; font-family: "Libre Franklin"; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-top: 4px; font-weight: 500; }
+  .footer-contact { font-size: 14px; line-height: 1.8; text-align: right; }
+  .footer-contact a { color: rgba(255,255,255,.82); text-decoration: none; }
+  .footer-contact a:hover { color: #fff; text-decoration: underline; }
+  .footer-legal {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px 36px;
+    font-size: 12px;
+    color: rgba(255,255,255,.4);
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 20px;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .about-grid { grid-template-columns: 1fr; gap: 28px; }
+    .scope-grid { grid-template-columns: 1fr; }
+    .cond-grid { grid-template-columns: 1fr; }
+    .cond-cell { border-right: none !important; }
+    .cond-cell:nth-last-child(-n+2):nth-child(odd) { border-bottom: 1px solid var(--line); }
+    .data-row { grid-template-columns: 1fr; }
+    .data-row .dk { border-right: none; }
+    .invest-hero, .invest-breakdown { padding-left: 24px; padding-right: 24px; }
+    .footer-inner { flex-direction: column; }
+    .footer-contact { text-align: left; }
+    .cover-meta { text-align: left; }
+  }
+
+  /* ---------- Print ---------- */
+  @media print {
+    @page { margin: 14mm; }
+    html, body { background: #fff; font-size: 11.5px; }
+    .doc { max-width: none; padding: 0; }
+    .cover-inner, .footer-inner, .footer-legal { max-width: none; padding-left: 0; padding-right: 0; }
+    section.block { padding: 22px 0; break-inside: avoid; }
+    .faixas-table tr { break-inside: avoid; }
+    .no-print { display: none !important; }
+    .invest { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .invest, .stat, .scope-item, .step, .cond-grid, .data-table, .accept {
+      box-shadow: none !important;
+    }
+    .cover, footer, .invest, .step .step-n, .cover-sub, .scope-icon {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .accept { border: 1px solid var(--line); }
+    a { color: inherit; text-decoration: none; }
+  }
+  .cover-top .logo-texto { font-family: 'Newsreader', Georgia, serif; font-size: 30px; font-weight: 600; color: var(--ink); letter-spacing: -.2px; }
+  .modal-erro { display: none; margin: 4px 0 14px; font-size: 13.5px; font-weight: 500; color: #c0392b; }
+  .modal-erro.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<header class="cover" data-screen-label="Capa">
+  <div class="cover-inner">
+    <div class="cover-top">
+      <div class="logo-texto"><?= marca.nome ?></div>
+      <div class="cover-meta">
+        <div><strong>Proposta Nº</strong> <?= dados.numero ?></div>
+        <div>Emitida em <strong><?= dados.dataEmissaoExt ?></strong></div>
+        <div><?= marca.cidade ?></div>
+      </div>
+    </div>
+
+    <div class="cover-body">
+      <div class="eyebrow"><?= marca.nome ?> · <?= marca.assinatura ?></div>
+      <h1>Proposta de Honorários Contábeis</h1>
+      <div class="cover-sub"><?= dados.regimeLabel ?> — <?= dados.atividade ?></div>
+
+      <div class="cover-client">
+        <div>
+          <div class="field-label">Apresentada a</div>
+          <div class="client-name"><?= dados.rep ?><span><?= dados.empresa ?></span></div>
+        </div>
+        <div>
+          <div class="field-label">CNPJ</div>
+          <div class="field-val"><?= dados.cnpj ?></div>
+        </div>
+        <div>
+          <div class="field-label">Validade</div>
+          <div class="field-val"><?= dados.validade ?> dias</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="doc">
+
+  <!-- ============ SOBRE ============ -->
+  <section class="block" data-screen-label="Sobre" style="border-top:none;">
+    <div class="eyebrow">Quem somos</div>
+    <h2 class="section-title">Sobre o escritório</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><?= marca.nome ?> acompanha empresas de serviços e de comércio com uma contabilidade próxima do dia a dia do negócio.</p>
+        <p>Na prática, funcionamos como o setor contábil e fiscal da sua empresa: cumprimos as obrigações, mantemos os registros em ordem e entregamos números que ajudam a decidir.</p>
+        <p>Você fala com quem acompanha a sua empresa, com prazos combinados e sem surpresa na cobrança.</p>
+      </div>
+      <div class="stats">
+        <? for (var si = 0; si < marca.destaques.length; si++) { ?>
+        <div class="stat"><div class="num"><?= marca.destaques[si].titulo ?></div><div class="lbl"><?= marca.destaques[si].texto ?></div></div>
+        <? } ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OBJETIVO ============ -->
+  <section class="block" data-screen-label="Objetivo">
+    <div class="eyebrow">Objetivo</div>
+    <h2 class="section-title">Objetivo desta proposta</h2>
+    <p class="section-intro">Esta proposta tem como finalidade formalizar a prestação de serviços contábeis para a <?= dados.empresa ?>, contemplando:</p>
+    <ul class="obj-list">
+      <? if (dados.ehHolding) { ?>
+      <li><span class="dot"></span>Estruturar e manter a contabilidade da holding no plano <?= dados.planoNome ?>, conforme os itens inclusos descritos adiante.</li>
+      <? } else { ?>
+      <li><span class="dot"></span>Assumir integralmente a escrituração contábil e fiscal da empresa sob o regime de <?= dados.regime ?>.</li>
+      <? } ?>
+      <li><span class="dot"></span>Garantir o cumprimento de todas as obrigações principais e acessórias junto aos órgãos federais, estaduais e municipais.</li>
+      <li><span class="dot"></span>Fornecer informações gerenciais e fiscais que apoiem a gestão e o planejamento tributário do negócio.</li>
+      <li><span class="dot"></span>Estabelecer um canal de atendimento contábil consultivo, ágil e de fácil acesso.</li>
+    </ul>
+  </section>
+
+  <!-- ============ ESCOPO ============ -->
+  <section class="block" data-screen-label="Escopo">
+    <div class="eyebrow">Escopo</div>
+    <? if (dados.ehHolding) { ?>
+    <h2 class="section-title">O que está incluído</h2>
+    <p class="section-intro">O plano <?= dados.planoNome ?> contempla os seguintes serviços:</p>
+    <div class="scope-grid">
+      <? for (var fi = 0; fi < dados.planoItens.length; fi++) { ?>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><h4><?= dados.planoItens[fi] ?></h4></div>
+      </div>
+      <? } ?>
+    </div>
+    <? } else { ?>
+    <h2 class="section-title">Escopo dos serviços</h2>
+    <p class="section-intro">Os honorários propostos contemplam a execução contínua dos seguintes serviços:</p>
+    <div class="scope-grid">
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div><h4>Escrituração contábil</h4><p>Lançamentos, conciliações e elaboração de balancetes e demonstrações contábeis.</p></div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg></div>
+        <div><h4>Escrituração fiscal</h4><p>Apuração de impostos do <?= dados.regime ?> (<?= dados.tributos ?>).</p></div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg></div>
+        <div><h4>Emissão de guias</h4><p>Geração e envio das guias de recolhimento de tributos e contribuições nos prazos.</p></div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><h4>Obrigações acessórias</h4><p>EFD-Contribuições, DCTFWeb, ECF, ECD e demais declarações exigidas.</p></div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg></div>
+        <div><h4>Departamento pessoal</h4><p>Folha de pagamento, eSocial, admissões, rescisões e encargos trabalhistas.</p></div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div><h4>Suporte consultivo</h4><p>Atendimento direto para dúvidas fiscais, contábeis e orientação na gestão.</p></div>
+      </div>
+    </div>
+    <? } ?>
+  </section>
+
+  <!-- ============ INVESTIMENTO ============ -->
+  <section class="block" data-screen-label="Investimento">
+    <div class="eyebrow">Investimento</div>
+    <h2 class="section-title">Investimento mensal</h2>
+    <? if (dados.ehHolding) { ?>
+    <p class="section-intro">Plano mensal de valor fixo, com os serviços inclusos descritos acima.</p>
+    <? } else { ?>
+    <p class="section-intro">Valor dos honorários calculado conforme o porte, faturamento e estrutura societária da empresa.</p>
+    <? } ?>
+
+    <div class="invest">
+      <div class="invest-hero">
+        <div class="label">Honorário mensal total</div>
+        <div class="invest-amount">
+          <span class="cur">R$</span>
+          <span class="val"><?= dados.totalFmt ?></span>
+          <span class="per">/ mês</span>
+        </div>
+        <div class="note"><? if (dados.ehHolding) { ?>Plano fixo · <?= dados.regimeLabel ?><? } else if (dados.temFaturamento) { ?>Base de faturamento estimado: R$ <?= dados.faturamentoFmt ?> · <?= dados.regimeLabel ?><? } else { ?><?= dados.regimeLabel ?><? } ?></div>
+      </div>
+      <? if (!dados.ehHolding) { ?>
+      <div class="invest-breakdown">
+        <div class="bd-title">Composição do honorário</div>
+        <? for (var i = 0; i < dados.linhas.length; i++) { var l = dados.linhas[i]; ?>
+        <div class="bd-row<?= l.muted ? ' muted' : '' ?>">
+          <div class="bd-name"><?= l.nome ?><? if (l.detalhe) { ?> <small><?= l.detalhe ?></small><? } ?></div>
+          <div class="bd-val"><?= l.valor ?></div>
+        </div>
+        <? } ?>
+        <div class="bd-row total">
+          <div class="bd-name">Total mensal</div>
+          <div class="bd-val">R$ <?= dados.totalFmt ?></div>
+        </div>
+      </div>
+      <? } ?>
+    </div>
+
+    <? if (dados.temTabelaFaixas) { ?>
+    <div class="faixas">
+      <div class="faixas-head">
+        <h3 class="faixas-title">Tabela de honorários por faixa de faturamento</h3>
+        <p class="faixas-sub">A mensalidade base acompanha o faturamento mensal da empresa. A faixa atual da empresa está destacada.</p>
+      </div>
+      <table class="faixas-table">
+        <thead>
+          <tr><th>Faixa de faturamento mensal</th><th class="ta-r">Mensalidade</th></tr>
+        </thead>
+        <tbody>
+          <? for (var fi = 0; fi < dados.faixas.length; fi++) { var fx = dados.faixas[fi]; ?>
+          <tr class="<?= fx.atual ? 'faixa-atual' : '' ?>">
+            <td><?= fx.de ?> <span class="ate">até</span> <?= fx.ate ?><? if (fx.atual) { ?> <span class="faixa-badge">faixa atual</span><? } ?></td>
+            <td class="ta-r"><?= fx.valor ?></td>
+          </tr>
+          <? } ?>
+        </tbody>
+      </table>
+      <p class="faixas-foot">A cada R$ <?= dados.faixaFmt ?> de faturamento adicional, acrescenta-se R$ <?= dados.incrementoFmt ?> à mensalidade base. Os valores desta tabela referem-se à <strong>mensalidade base</strong>; adicionais de pessoal e serviços opcionais, quando houver, são somados conforme a composição acima.</p>
+    </div>
+    <? } ?>
+  </section>
+  <section class="block" data-screen-label="Formato de trabalho">
+    <div class="eyebrow">Como trabalhamos</div>
+    <h2 class="section-title">Formato de trabalho</h2>
+    <p class="section-intro">Um fluxo mensal claro, do recebimento dos documentos à entrega da informação gerencial.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div><h4>Entrega de documentos</h4><p>Você nos envia notas fiscais, extratos e movimentações do mês pelos canais combinados, de forma simples e segura.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div><h4>Escrituração e apuração</h4><p>Realizamos a escrituração contábil e fiscal e apuramos os tributos devidos no período.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div><h4>Obrigações e guias</h4><p>Geramos e enviamos guias e declarações dentro dos prazos legais, mantendo a empresa em conformidade.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div><h4>Entrega gerencial</h4><p>Disponibilizamos relatórios e balancetes e ficamos à disposição para orientar suas decisões.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONDIÇÕES ============ -->
+  <section class="block" data-screen-label="Condições comerciais">
+    <div class="eyebrow">Condições</div>
+    <h2 class="section-title">Condições comerciais</h2>
+    <div class="cond-grid">
+      <div class="cond-cell">
+        <div class="field-label">Vencimento</div>
+        <div class="cond-val">Todo dia 10</div>
+        <div class="cond-desc">Honorário referente ao mês de competência anterior.</div>
+      </div>
+      <div class="cond-cell">
+        <div class="field-label">Reajuste</div>
+        <div class="cond-val">Anual pelo IPCA</div>
+        <div class="cond-desc">Correção pela variação acumulada do índice nos 12 meses.</div>
+      </div>
+      <div class="cond-cell">
+        <div class="field-label">Vigência</div>
+        <div class="cond-val">Prazo indeterminado</div>
+        <div class="cond-desc">Início na assinatura do contrato de prestação de serviços.</div>
+      </div>
+      <div class="cond-cell">
+        <div class="field-label">Rescisão</div>
+        <div class="cond-val">Aviso prévio de 30 dias</div>
+        <div class="cond-desc">Por qualquer das partes, mediante comunicação por escrito.</div>
+      </div>
+      <div class="cond-cell">
+        <div class="field-label">Entrega de documentos</div>
+        <div class="cond-val">Até o 5º dia útil</div>
+        <div class="cond-desc">Notas, extratos e movimentações do mês de competência.</div>
+      </div>
+      <div class="cond-cell">
+        <div class="field-label">Validade da proposta</div>
+        <div class="cond-val"><?= dados.validade ?> dias</div>
+        <div class="cond-desc">A contar da emissão: vale até <?= dados.validaAteExt ?>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DADOS DO CLIENTE ============ -->
+  <section class="block" data-screen-label="Dados do cliente">
+    <div class="eyebrow">Contratante</div>
+    <h2 class="section-title">Dados do cliente contratante</h2>
+    <div class="data-table">
+      <div class="data-row"><div class="dk">Empresa</div><div class="dv"><?= dados.empresa ?></div></div>
+      <div class="data-row"><div class="dk">CNPJ</div><div class="dv"><?= dados.cnpj ?></div></div>
+      <div class="data-row"><div class="dk">Titular / Representante</div><div class="dv"><?= dados.rep ?></div></div>
+      <? if (dados.ehHolding) { ?>
+      <div class="data-row"><div class="dk">Plano contratado</div><div class="dv">Holding — <?= dados.planoNome ?></div></div>
+      <? } else { ?>
+      <div class="data-row"><div class="dk">Regime tributário</div><div class="dv"><?= dados.regime ?></div></div>
+      <? if (dados.setor) { ?>
+      <div class="data-row"><div class="dk">Setor</div><div class="dv"><?= dados.setor ?></div></div>
+      <? } ?>
+      <? } ?>
+      <div class="data-row"><div class="dk">Atividade</div><div class="dv"><?= dados.atividade ?></div></div>
+    </div>
+  </section>
+
+  <!-- ============ OBSERVAÇÕES ============ -->
+  <section class="block" data-screen-label="Observações">
+    <div class="eyebrow">Observações</div>
+    <h2 class="section-title">Observações</h2>
+    <div class="obs-box" style="white-space: pre-wrap;"><? if (dados.observacoes && dados.observacoes.trim()) { ?><?= dados.observacoes ?><? } else { ?>Sem observações adicionais para esta proposta.<? } ?></div>
+  </section>
+
+  <!-- ============ ACEITE ============ -->
+  <section class="block" data-screen-label="Aceite">
+    <div class="eyebrow">Aceite</div>
+    <h2 class="section-title">Aceite da proposta</h2>
+    <div class="accept">
+      <div id="acceptDefault">
+        <h3>Pronto para começar?</h3>
+        <p>Ao aceitar, você concorda com os termos, valores e condições descritos nesta proposta. O aceite digital tem validade para formalização do início dos trabalhos e posterior assinatura do contrato.</p>
+        <button class="btn no-print" id="openModalBtn">Aceitar Proposta</button>
+        <p class="small no-print">Você poderá revisar e assinar o contrato definitivo em seguida.</p>
+      </div>
+      <div id="vencidaState" style="display:none">
+        <h3>Proposta vencida</h3>
+        <p>A validade desta proposta terminou em <?= dados.validaAteExt ?>. Peça uma versão atualizada pelo <?= marca.telefone ?>.</p>
+      </div>
+      <div class="accepted" id="acceptedState">
+        <div class="check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Proposta aceita</h3>
+        <div class="who" id="acceptedWho"></div>
+        <div class="when" id="acceptedWhen"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ RODAPÉ ============ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand"><?= marca.nome ?><span class="tag"><?= marca.assinatura ?> · <?= marca.cidade ?></span></div>
+    </div>
+    <div class="footer-contact">
+      <div><?= marca.telefone ?></div>
+      <div><a href="mailto:<?= marca.email ?>"><?= marca.email ?></a></div>
+      <div><?= marca.cidade ?></div>
+    </div>
+  </div>
+  <div class="footer-legal">
+    Documento gerado por <?= marca.nome ?> · Proposta Nº <?= dados.numero ?> · Emitida em <?= dados.dataEmissaoExt ?>. Os valores e condições aqui descritos têm validade de <?= dados.validade ?> dias a contar da data de emissão.
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-overlay no-print" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h3 id="modalTitle">Confirmar aceite</h3>
+    <p class="modal-sub">Informe os dados do representante responsável pelo aceite desta proposta.</p>
+    <form id="acceptForm" novalidate>
+      <div class="form-field" id="fieldName">
+        <label for="repName">Nome completo</label>
+        <input type="text" id="repName" name="repName" autocomplete="name" placeholder="Nome completo do responsável" />
+        <div class="err">Informe o nome completo do representante.</div>
+      </div>
+      <div class="form-field" id="fieldCpf">
+        <label for="repCpf">CPF</label>
+        <input type="text" id="repCpf" name="repCpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" />
+        <div class="err">Informe um CPF válido.</div>
+      </div>
+      <div class="modal-erro" id="acceptError" role="alert"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+        <button type="submit" class="btn">Confirmar Aceite</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Estado da proposta, impresso pelo servidor (ver jsonParaScript_ em webapp.gs).
+  var ESTADO = <?!= estadoJson ?>;
+
+  (function () {
+    var overlay = document.getElementById('modalOverlay');
+    var openBtn = document.getElementById('openModalBtn');
+    var cancelBtn = document.getElementById('cancelBtn');
+    var form = document.getElementById('acceptForm');
+    var nameInput = document.getElementById('repName');
+    var cpfInput = document.getElementById('repCpf');
+    var fieldName = document.getElementById('fieldName');
+    var fieldCpf = document.getElementById('fieldCpf');
+    var erroBox = document.getElementById('acceptError');
+    var submitBtn = form.querySelector('button[type=submit]');
+
+    function openModal() {
+      overlay.classList.add('open');
+      setTimeout(function () { nameInput.focus(); }, 120);
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function mostrarAceita(por, em) {
+      document.getElementById('acceptDefault').style.display = 'none';
+      document.getElementById('acceptedState').style.display = 'flex';
+      document.getElementById('acceptedWho').textContent = 'Aceita por ' + por;
+      document.getElementById('acceptedWhen').textContent = 'Em ' + em;
+    }
+
+    // A página abre no estado em que a proposta está, não no que o navegador lembra.
+    if (ESTADO.aceita) {
+      mostrarAceita(ESTADO.aceita.por, ESTADO.aceita.em);
+    } else if (ESTADO.vencida) {
+      document.getElementById('acceptDefault').style.display = 'none';
+      document.getElementById('vencidaState').style.display = 'block';
+    }
+
+    openBtn.addEventListener('click', openModal);
+    cancelBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
+    cpfInput.addEventListener('input', function () {
+      var v = cpfInput.value.replace(/\D/g, '').slice(0, 11);
+      var out = v;
+      if (v.length > 9) out = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+      else if (v.length > 6) out = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+      else if (v.length > 3) out = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+      cpfInput.value = out;
+      fieldCpf.classList.remove('invalid');
+    });
+    nameInput.addEventListener('input', function () { fieldName.classList.remove('invalid'); });
+
+    // Mesma regra do servidor (cpfValido_), só para avisar antes de enviar.
+    function cpfValido(d) {
+      if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+      for (var fim = 9; fim <= 10; fim++) {
+        var soma = 0;
+        for (var i = 0; i < fim; i++) soma += Number(d.charAt(i)) * (fim + 1 - i);
+        if ((soma * 10) % 11 % 10 !== Number(d.charAt(fim))) return false;
+      }
+      return true;
+    }
+
+    function falhou(mensagem) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirmar Aceite';
+      erroBox.textContent = mensagem;
+      erroBox.classList.add('show');
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nameVal = nameInput.value.trim();
+      var cpfDigits = cpfInput.value.replace(/\D/g, '');
+      var ok = true;
+      if (nameVal.length < 3) { fieldName.classList.add('invalid'); ok = false; }
+      if (!cpfValido(cpfDigits)) { fieldCpf.classList.add('invalid'); ok = false; }
+      if (!ok) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+      erroBox.classList.remove('show');
+
+      // Só mostra "aceita" depois que o servidor confirma que gravou.
+      google.script.run
+        .withSuccessHandler(function (res) {
+          if (res && res.ok) {
+            mostrarAceita(res.por, res.em);
+            closeModal();
+          } else {
+            falhou((res && res.erro) || 'Não foi possível registrar o aceite.');
+          }
+        })
+        .withFailureHandler(function () {
+          falhou('Não foi possível registrar o aceite. Verifique a conexão e tente de novo.');
+        })
+        .aceitarProposta(ESTADO.codigo, nameVal, cpfDigits);
+    });
+  })();
+</script>
+
+</body>
+</html>

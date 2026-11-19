@@ -1,0 +1,12 @@
+{
+  "name": "gerador-propostas-apps-script",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerador de propostas comerciais em Google Apps Script: calculo de honorarios por tabela, link curto para o cliente e aceite digital",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

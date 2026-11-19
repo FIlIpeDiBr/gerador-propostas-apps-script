@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Gerar proposta — <?= marca.nome ?></title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Newsreader:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --accent: #2a5d8f;
+    --accent-deep: #1d4469;
+    --accent-tint: #eef3f8;
+    --ink: #18313e;
+    --ink-soft: #2c4451;
+    --body: #4a5660;
+    --muted: #818d92;
+    --bg: #f7f7f4;
+    --surface: #fff;
+    --line: #e7e8e2;
+    --line-soft: #eef0ea;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --danger: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Libre Franklin", system-ui, sans-serif;
+    color: var(--body);
+    background: var(--bg);
+    line-height: 1.55;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 36px 24px 80px; }
+  .header { margin-bottom: 32px; }
+  .header .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .header .brand .brand-logo { height: 44px; width: auto; display: block; }
+  .header h1 {
+    font-family: "Newsreader", serif;
+    font-weight: 500;
+    font-size: 32px;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+  .header p { margin-top: 8px; color: var(--muted); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 28px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(24, 49, 62, .04);
+  }
+  .card h2 {
+    font-family: "Newsreader", serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .card .hint { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 640px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    padding: 11px 13px;
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    background: #fbfcfa;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(42,93,143,.12);
+  }
+  textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+  .with-prefix { position: relative; }
+  .with-prefix .prefix {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .with-prefix input { padding-left: 38px; }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #fbfcfa;
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .check-row:hover { border-color: var(--accent); }
+  .check-row input { margin-top: 3px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+  .check-row .check-text { flex: 1; }
+  .check-row .check-title { font-weight: 600; color: var(--ink); font-size: 14.5px; }
+  .check-row .check-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .err { display: none; font-size: 12.5px; color: var(--danger); margin-top: 5px; font-weight: 500; }
+  .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--danger); background: #fdf3f1; }
+  .field.invalid .err { display: block; }
+
+  /* Banner global de erro */
+  .error-banner {
+    display: none;
+    margin-bottom: 18px;
+    padding: 14px 18px;
+    background: #fdecea;
+    border: 1.5px solid #f5b7b1;
+    border-left: 4px solid var(--danger);
+    border-radius: 9px;
+    color: #7a1f15;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .error-banner.show { display: block; }
+  .error-banner strong { color: var(--danger); }
+
+  /* Seletor de tipo de proposta */
+  .tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .tipo-grid { grid-template-columns: 1fr; } }
+  .tipo-opt {
+    position: relative;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px 16px 44px;
+    cursor: pointer;
+    background: #fbfcfa;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .tipo-opt:hover { border-color: var(--accent); }
+  .tipo-opt input { position: absolute; left: 16px; top: 18px; width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+  .tipo-opt.selected { border-color: var(--accent); background: var(--accent-tint); box-shadow: 0 0 0 3px rgba(42,93,143,.10); }
+  .tipo-titulo { font-weight: 700; color: var(--ink); font-size: 15.5px; }
+  .tipo-desc { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+  /* Cards dos planos de holding */
+  .planos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .planos-grid { grid-template-columns: 1fr; } }
+  .plano-card {
+    position: relative;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 18px 16px;
+    cursor: pointer;
+    background: #fbfcfa;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+    display: flex; flex-direction: column;
+  }
+  .plano-card:hover { border-color: var(--accent); }
+  .plano-card.selected { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(42,93,143,.12); }
+  .plano-card input { position: absolute; right: 14px; top: 16px; width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+  .plano-nome { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-deep); }
+  .plano-preco { font-family: "Newsreader", serif; font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1.1; margin: 4px 0 2px; }
+  .plano-preco span { font-size: 14px; color: var(--muted); font-family: "Libre Franklin", sans-serif; }
+  .plano-resumo { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+  .plano-features { list-style: none; padding: 0; margin: 8px 0 0; border-top: 1px solid var(--line-soft); padding-top: 10px; }
+  .plano-features li { font-size: 12.5px; color: var(--body); padding: 3px 0 3px 18px; position: relative; line-height: 1.4; }
+  .plano-features li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  /* Display da base calculada (SN/LP) */
+  .base-calc {
+    background: var(--accent-tint);
+    border: 1.5px solid #d3e1ee;
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+  .base-calc-label { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-deep); }
+  .base-calc-val { font-family: "Newsreader", serif; font-size: 26px; font-weight: 600; color: var(--accent-deep); line-height: 1.1; margin-top: 2px; }
+  .base-calc-desc { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* Preview do total ao vivo */
+  .live-total {
+    margin-top: 16px;
+    padding: 18px 22px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(160deg, var(--accent-deep), var(--accent));
+    color: #fff;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .live-total .label {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: rgba(255,255,255,.78);
+  }
+  .live-total .val {
+    font-family: "Newsreader", serif;
+    font-size: 32px; font-weight: 600;
+    line-height: 1;
+  }
+  .live-total .val .cur { font-size: 16px; font-weight: 500; color: rgba(255,255,255,.85); margin-right: 6px; }
+  .live-total .val .per { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.78); margin-left: 4px; }
+
+  /* Ações */
+  .actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 26px;
+    cursor: pointer;
+    transition: background .15s, transform .15s;
+  }
+  .btn:hover { background: var(--accent-deep); transform: translateY(-1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1.5px solid var(--line);
+    padding: 13px 22px;
+  }
+  .btn-ghost:hover { background: #f4f5f1; color: var(--ink); transform: none; }
+
+  /* Resultado */
+  .result {
+    display: none;
+    margin-top: 24px;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(42,93,143,.12);
+  }
+  .result.show { display: block; }
+  .result h2 {
+    font-family: "Newsreader", serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .result h2::before { content: "✓ "; color: var(--accent); }
+  .result .result-sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .result .link-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .result .link-box input {
+    flex: 1;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    background: var(--accent-tint);
+    border-color: transparent;
+  }
+  .result .link-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .result .link-actions .btn { padding: 11px 18px; font-size: 14px; }
+  .copy-feedback { display: inline-block; margin-left: 10px; font-size: 13px; color: var(--accent-deep); font-weight: 600; opacity: 0; transition: opacity .2s; }
+  .copy-feedback.show { opacity: 1; }
+
+  .summary {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .summary h3 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .summary-row .k { color: var(--body); }
+  .summary-row .v { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .summary-row.total { padding-top: 10px; margin-top: 6px; border-top: 1px solid var(--line-soft); font-size: 16px; }
+  .summary-row.total .v { color: var(--accent-deep); }
+  .header .brand .logo-texto { font-family: 'Newsreader', Georgia, serif; font-size: 26px; font-weight: 600; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <div class="brand">
+    <div class="logo-texto"><?= marca.nome ?></div>
+  </div>
+  <h1>Gerar nova proposta</h1>
+  <p>Preencha os campos abaixo e clique em <strong>Gerar link</strong>. O link gerado pode ser enviado ao cliente por WhatsApp ou e-mail.</p>
+</div>
+
+<div class="error-banner" id="errorBanner" role="alert"></div>
+
+<form id="propForm" novalidate>
+
+  <!-- TIPO DE PROPOSTA -->
+  <div class="card">
+    <h2>Tipo de proposta</h2>
+    <p class="hint">Escolha entre honorários calculados por regime ou um plano de holding com valor fixo.</p>
+    <div class="tipo-grid">
+      <label class="tipo-opt selected" id="tipoHonorarios">
+        <input type="radio" name="tipo" value="honorarios" checked />
+        <div class="tipo-titulo">Honorários contábeis</div>
+        <div class="tipo-desc">Valor calculado por regime, setor, faturamento e quadro de pessoal.</div>
+      </label>
+      <label class="tipo-opt" id="tipoHolding">
+        <input type="radio" name="tipo" value="holding" />
+        <div class="tipo-titulo">Plano de holding</div>
+        <div class="tipo-desc">Pacote de valor fixo mensal.</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="card">
+    <h2>1. Identificação da proposta</h2>
+    <p class="hint">Esses dados aparecem no cabeçalho da proposta.</p>
+    <div class="grid grid-3">
+      <div class="field">
+        <label for="numero">Número da proposta</label>
+        <input type="text" id="numero" name="numero" />
+        <div class="err">Informe um número.</div>
+      </div>
+      <div class="field">
+        <label for="dataEmissao">Data de emissão</label>
+        <input type="date" id="dataEmissao" name="dataEmissao" />
+        <div class="err">Informe a data.</div>
+      </div>
+      <div class="field">
+        <label for="validade">Validade (dias)</label>
+        <input type="number" id="validade" name="validade" min="1" max="365" value="30" />
+        <div class="err">Entre 1 e 365 dias.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENTE -->
+  <div class="card">
+    <h2>2. Cliente</h2>
+    <p class="hint">Dados que vão aparecer na capa e na tabela de dados do contratante.</p>
+    <div class="grid">
+      <div class="field">
+        <label for="rep">Nome do representante</label>
+        <input type="text" id="rep" name="rep" placeholder="Ex.: Maria Souza" />
+        <div class="err">Informe o nome do representante.</div>
+      </div>
+      <div class="field">
+        <label for="empresa">Razão social</label>
+        <input type="text" id="empresa" name="empresa" placeholder="Ex.: Comércio Exemplo Ltda" />
+        <div class="err">Informe a razão social.</div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:16px">
+      <label for="cnpj">CNPJ</label>
+      <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" maxlength="18" />
+      <div class="err">CNPJ inválido.</div>
+    </div>
+    <div class="grid grid-2" style="margin-top:16px" id="campoRegime">
+      <div class="field">
+        <label for="regime">Regime tributário</label>
+        <select id="regime" name="regime">
+          <option value="">Selecione...</option>
+          <option value="Simples Nacional">Simples Nacional</option>
+          <option value="Lucro Presumido">Lucro Presumido</option>
+          <option value="Lucro Real">Lucro Real</option>
+        </select>
+        <div class="err">Selecione um regime.</div>
+      </div>
+      <div class="field" id="campoSetor" style="display:none">
+        <label for="setor">Setor</label>
+        <select id="setor" name="setor">
+          <option value="">Selecione...</option>
+          <option value="Serviços">Serviços</option>
+          <option value="Comércio">Comércio</option>
+        </select>
+        <div class="err">Selecione o setor.</div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:16px">
+      <label for="atividade">Atividade / Ramo</label>
+      <input type="text" id="atividade" name="atividade" placeholder="Ex.: Comércio varejista" />
+      <div class="err">Informe a atividade.</div>
+    </div>
+  </div>
+
+  <!-- INVESTIMENTO -->
+  <div class="card">
+    <h2 id="tituloSecao3">3. Composição do honorário</h2>
+    <p class="hint" id="hintComposicao">Selecione o regime tributário na seção anterior para liberar os campos corretos.</p>
+
+    <!-- Faturamento (sempre visível, exceto enquanto nenhum regime escolhido) -->
+    <div class="field" id="campoFaturamento" style="display:none">
+      <label for="faturamento">Faturamento mensal estimado</label>
+      <div class="with-prefix">
+        <span class="prefix">R$</span>
+        <input type="number" id="faturamento" name="faturamento" min="0" step="0.01" placeholder="50000,00" />
+      </div>
+      <div class="err">Informe o faturamento.</div>
+    </div>
+
+    <!-- ===== Bloco SN / LP: cálculo automático ===== -->
+    <div id="blocoAuto" style="display:none">
+      <div class="base-calc" id="baseCalc">
+        <div class="base-calc-label">Mensalidade base (calculada pela tabela)</div>
+        <div class="base-calc-val">R$ <span id="baseCalcVal">0,00</span></div>
+        <div class="base-calc-desc" id="baseCalcDesc"></div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:18px">
+        <div class="field">
+          <label for="totalFunc">Total de funcionários</label>
+          <input type="number" id="totalFunc" name="totalFunc" min="0" max="200" value="0" />
+          <div class="err">Valor inválido.</div>
+        </div>
+        <div class="field">
+          <label for="totalSocios">Total de sócios</label>
+          <input type="number" id="totalSocios" name="totalSocios" min="0" max="50" value="1" />
+          <div class="err">Valor inválido.</div>
+        </div>
+      </div>
+      <p class="hint" id="hintPessoal" style="margin-top:8px; margin-bottom:0"></p>
+
+      <div style="margin-top:16px" id="campoFatorR">
+        <label class="check-row">
+          <input type="checkbox" id="fatorR" name="fatorR" />
+          <div class="check-text">
+            <div class="check-title">Contratar Controle Fator R</div>
+            <div class="check-desc">Acompanhamento do enquadramento Anexo III/V — R$ <span id="valorFatorR"></span>/mês. Exclusivo do Simples Nacional.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- ===== Bloco Lucro Real: entrada manual ===== -->
+    <div id="blocoLR" style="display:none">
+      <p class="hint" style="margin-top:0">No Lucro Real os valores são informados manualmente, já calculados.</p>
+      <div class="grid grid-2">
+        <div class="field">
+          <label for="mensalidadeBaseManual">Taxa sobre faturamento</label>
+          <div class="with-prefix">
+            <span class="prefix">R$</span>
+            <input type="number" id="mensalidadeBaseManual" name="mensalidadeBaseManual" min="0" step="0.01" placeholder="0,00" />
+          </div>
+          <div class="err">Informe a taxa sobre faturamento.</div>
+        </div>
+        <div class="field">
+          <label for="taxaPessoalManual">Taxa sobre pessoal</label>
+          <div class="with-prefix">
+            <span class="prefix">R$</span>
+            <input type="number" id="taxaPessoalManual" name="taxaPessoalManual" min="0" step="0.01" placeholder="0,00" />
+          </div>
+          <div class="err">Valor inválido.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Bloco Holding: seleção de plano fixo ===== -->
+    <div id="blocoHolding" style="display:none">
+      <p class="hint" style="margin-top:0">Selecione um dos planos de holding. O valor é fixo mensal.</p>
+      <div class="planos-grid" id="planosGrid"></div>
+      <div class="err" id="errPlano" style="display:none; margin-top:10px">Selecione um plano.</div>
+    </div>
+
+    <div class="live-total">
+      <div>
+        <div class="label">Honorário mensal total</div>
+        <div class="val"><span class="cur">R$</span><span id="liveTotal">0,00</span><span class="per">/ mês</span></div>
+      </div>
+      <div style="font-size:12.5px; color:rgba(255,255,255,.8); text-align:right">
+        Atualizado automaticamente<br />conforme os campos preenchidos.
+      </div>
+    </div>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="card">
+    <h2>4. Observações (opcional)</h2>
+    <p class="hint">Texto livre que aparecerá na seção de observações da proposta. Deixe em branco se não houver.</p>
+    <div class="field">
+      <textarea id="observacoes" name="observacoes" placeholder="Ex.: Honorários referentes ao primeiro mês com 50% de desconto..."></textarea>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-ghost" id="resetBtn">Limpar formulário</button>
+    <button type="submit" class="btn" id="submitBtn">Gerar link da proposta</button>
+  </div>
+</form>
+
+<!-- RESULTADO -->
+<div class="result" id="resultBox">
+  <h2>Proposta gerada</h2>
+  <div class="result-sub" id="resultSub"></div>
+
+  <label for="linkOut">Link da proposta</label>
+  <div class="link-box">
+    <input type="text" id="linkOut" readonly />
+  </div>
+  <div class="link-actions">
+    <button type="button" class="btn" id="copyBtn">Copiar link</button>
+    <button type="button" class="btn btn-ghost" id="previewBtn">Visualizar em nova aba</button>
+    <span class="copy-feedback" id="copyFeedback">Copiado ✓</span>
+  </div>
+
+  <div class="summary" id="summaryBox"></div>
+</div>
+
+</div>
+
+<script>
+  // ====== Utilidades ======
+  function fmtBR(n) {
+    n = Number(n) || 0;
+    return n.toFixed(2)
+      .replace('.', ',')
+      .replace(/\B(?=(\d{3})+(?!\d,))/g, '.');
+  }
+  function digits(str) { return (str || '').replace(/\D/g, ''); }
+  function pad(n, l) { return String(n).padStart(l, '0'); }
+  function alnum(str) { return (str || '').toUpperCase().replace(/[^0-9A-Z]/g, ''); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ====== Máscara de CNPJ (aceita o alfanumérico, com letras) ======
+  var cnpjInput = document.getElementById('cnpj');
+  cnpjInput.addEventListener('input', function () {
+    var v = alnum(cnpjInput.value).slice(0, 14);
+    var out = v;
+    if (v.length > 12) out = v.replace(/(.{2})(.{3})(.{3})(.{4})(.{1,2})/, '$1.$2.$3/$4-$5');
+    else if (v.length > 8) out = v.replace(/(.{2})(.{3})(.{3})(.{1,4})/, '$1.$2.$3/$4');
+    else if (v.length > 5) out = v.replace(/(.{2})(.{3})(.{1,3})/, '$1.$2.$3');
+    else if (v.length > 2) out = v.replace(/(.{2})(.{1,3})/, '$1.$2');
+    cnpjInput.value = out;
+    cnpjInput.parentElement.classList.remove('invalid');
+  });
+
+  // ====== Defaults ======
+  (function setDefaults() {
+    // Data emissão: hoje
+    var hoje = new Date();
+    document.getElementById('dataEmissao').value =
+      hoje.getFullYear() + '-' + pad(hoje.getMonth() + 1, 2) + '-' + pad(hoje.getDate(), 2);
+
+    // Número da proposta: ANO-MMDD-XX (timestamp curto, único por dia)
+    var seq = Math.floor(Math.random() * 90 + 10);
+    document.getElementById('numero').value =
+      hoje.getFullYear() + '-' + pad(hoje.getMonth() + 1, 2) + pad(hoje.getDate(), 2) + '-' + seq;
+  })();
+
+  // ====== Tabela, planos e chave vêm do servidor (ver paginaDoGerador_) ======
+  // Valores em centavos: a prévia usa os mesmos números que o cálculo da proposta.
+  var CFG = <?!= configJson ?>;
+  var TABELA = CFG.tabela;
+  var PLANOS = CFG.planos;
+  function fmtC(c) { return fmtBR(c / 100); }
+  function centavos(reais) { return Math.round((Number(reais) || 0) * 100); }
+  document.getElementById('valorFatorR').textContent = fmtC(CFG.fatorR);
+
+  var planoSelecionado = '';   // id do plano escolhido (modo holding)
+  function tipoAtual() {
+    var el = document.querySelector('input[name="tipo"]:checked');
+    return el ? el.value : 'honorarios';
+  }
+
+  // ====== Renderiza os cards de plano (holding) ======
+  function renderPlanos() {
+    var grid = $('planosGrid');
+    grid.innerHTML = '';
+    PLANOS.forEach(function (p) {
+      var card = document.createElement('label');
+      card.className = 'plano-card' + (planoSelecionado === p.id ? ' selected' : '');
+      card.setAttribute('data-id', p.id);
+      var feats = p.itens.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('');
+      card.innerHTML =
+        '<input type="radio" name="planoId" value="' + esc(p.id) + '"' + (planoSelecionado === p.id ? ' checked' : '') + ' />' +
+        '<div class="plano-nome">' + esc(p.nome) + '</div>' +
+        '<div class="plano-preco">R$ ' + fmtC(p.preco) + '<span> /mês</span></div>' +
+        '<div class="plano-resumo">' + esc(p.resumo) + '</div>' +
+        '<ul class="plano-features">' + feats + '</ul>';
+      card.querySelector('input').addEventListener('change', function () {
+        planoSelecionado = p.id;
+        $('errPlano').style.display = 'none';
+        // atualiza destaque
+        Array.prototype.forEach.call(grid.querySelectorAll('.plano-card'), function (c) {
+          c.classList.toggle('selected', c.getAttribute('data-id') === planoSelecionado);
+        });
+        recalcTotal();
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // Calcula a mensalidade base pela faixa de faturamento.
+  function calcBase(tabela, faturamento) {
+    var faixas = Math.max(0, Math.ceil((faturamento || 0) / CFG.faixa) - 1);
+    return tabela.base + faixas * tabela.incremento;
+  }
+
+  // ====== Visibilidade dos campos conforme tipo + regime ======
+  function atualizarVisibilidade() {
+    var tipo = tipoAtual();
+    var ehHolding = (tipo === 'holding');
+
+    // Destaca o card de tipo selecionado
+    $('tipoHonorarios').classList.toggle('selected', !ehHolding);
+    $('tipoHolding').classList.toggle('selected', ehHolding);
+
+    // Seção 2: regime/setor só no modo honorários
+    $('campoRegime').style.display = ehHolding ? 'none' : '';
+
+    // Seção 3: título e blocos
+    $('tituloSecao3').textContent = ehHolding ? '3. Plano de holding' : '3. Composição do honorário';
+    $('blocoHolding').style.display = ehHolding ? '' : 'none';
+
+    var regime = $('regime').value;
+    var ehSNLP = !ehHolding && (regime === 'Simples Nacional' || regime === 'Lucro Presumido');
+    var ehLR = !ehHolding && (regime === 'Lucro Real');
+    var ehSN = !ehHolding && (regime === 'Simples Nacional');
+
+    $('campoSetor').style.display = ehSNLP ? '' : 'none';
+    $('campoFaturamento').style.display = (ehSNLP || ehLR) ? '' : 'none';
+    $('blocoAuto').style.display = ehSNLP ? '' : 'none';
+    $('blocoLR').style.display = ehLR ? '' : 'none';
+    $('campoFatorR').style.display = ehSN ? '' : 'none';
+    if (!ehSN) $('fatorR').checked = false;
+
+    var hint = $('hintComposicao');
+    if (ehHolding) {
+      hint.style.display = 'none';
+    } else if (ehSNLP) {
+      hint.textContent = 'A mensalidade base é calculada automaticamente pela tabela vigente, conforme regime, setor e faturamento.';
+      hint.style.display = '';
+    } else if (ehLR) {
+      hint.textContent = 'Informe os valores já calculados das taxas sobre faturamento e pessoal.';
+      hint.style.display = '';
+    } else {
+      hint.textContent = 'Selecione o regime tributário na seção anterior para liberar os campos corretos.';
+      hint.style.display = '';
+    }
+
+    // Texto de inclusos no pessoal
+    var setor = $('setor').value;
+    var tabela = (TABELA[regime] || {})[setor];
+    var hintPessoal = $('hintPessoal');
+    if (tabela) {
+      hintPessoal.textContent =
+        'Os ' + tabela.pessoalLimite + ' primeiros sócios e os ' + tabela.pessoalLimite +
+        ' primeiros funcionários já estão inclusos na mensalidade. Cada adicional acima desse limite é cobrado a R$ ' +
+        fmtC(tabela.pessoalValor) + '/mês.';
+    } else if (ehSNLP) {
+      hintPessoal.textContent = 'Selecione o setor para calcular os adicionais de pessoal.';
+    } else {
+      hintPessoal.textContent = '';
+    }
+
+    recalcTotal();
+  }
+
+  // ====== Total ao vivo ======
+  function recalcTotal() {
+    var tipo = tipoAtual();
+    var total = 0;
+
+    if (tipo === 'holding') {
+      var plano = null;
+      for (var i = 0; i < PLANOS.length; i++) if (PLANOS[i].id === planoSelecionado) plano = PLANOS[i];
+      total = plano ? plano.preco : 0;
+      $('liveTotal').textContent = fmtC(total);
+      return;
+    }
+
+    var regime = $('regime').value;
+    var baseCalc = $('baseCalc');
+
+    if (regime === 'Lucro Real') {
+      total = centavos($('mensalidadeBaseManual').value) + centavos($('taxaPessoalManual').value);
+    } else {
+      var setor = $('setor').value;
+      var tabela = (TABELA[regime] || {})[setor];
+      if (tabela) {
+        var fat = centavos($('faturamento').value);
+        var base = calcBase(tabela, fat);
+        var tf = Math.max(0, Math.floor(Number($('totalFunc').value) || 0));
+        var ts = Math.max(0, Math.floor(Number($('totalSocios').value) || 0));
+        var excF = Math.max(0, tf - tabela.pessoalLimite);
+        var excS = Math.max(0, ts - tabela.pessoalLimite);
+        var fr = $('fatorR').checked ? CFG.fatorR : 0;
+        total = base + excF * tabela.pessoalValor + excS * tabela.pessoalValor + fr;
+
+        $('baseCalcVal').textContent = fmtC(base);
+        $('baseCalcDesc').textContent = 'Faixa de faturamento · ' + regime + ' · ' + setor;
+        baseCalc.style.display = '';
+      } else {
+        $('baseCalcVal').textContent = '0,00';
+        $('baseCalcDesc').textContent = 'Selecione o setor para calcular a base.';
+        baseCalc.style.display = '';
+      }
+    }
+    $('liveTotal').textContent = fmtC(total);
+  }
+
+  // Liga os eventos
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="tipo"]'), function (r) {
+    r.addEventListener('change', atualizarVisibilidade);
+  });
+  ['regime'].forEach(function (id) {
+    $(id).addEventListener('change', atualizarVisibilidade);
+  });
+  ['setor','faturamento','totalFunc','totalSocios','fatorR','mensalidadeBaseManual','taxaPessoalManual'].forEach(function (id) {
+    $(id).addEventListener('input', atualizarVisibilidade);
+    $(id).addEventListener('change', atualizarVisibilidade);
+  });
+  renderPlanos();
+  atualizarVisibilidade();
+
+  // ====== Validação e submit ======
+  var form = document.getElementById('propForm');
+  var submitBtn = document.getElementById('submitBtn');
+
+  function clearInvalid() {
+    document.querySelectorAll('.field.invalid').forEach(function (el) {
+      el.classList.remove('invalid');
+    });
+    document.getElementById('errorBanner').classList.remove('show');
+  }
+  // Mapa de campos para nomes amigáveis (usado na mensagem global)
+  var FIELD_LABELS = {
+    numero: 'Número da proposta',
+    dataEmissao: 'Data de emissão',
+    validade: 'Validade (dias)',
+    rep: 'Nome do representante',
+    empresa: 'Razão social',
+    cnpj: 'CNPJ',
+    regime: 'Regime tributário',
+    setor: 'Setor',
+    atividade: 'Atividade / Ramo',
+    faturamento: 'Faturamento mensal estimado',
+    totalFunc: 'Total de funcionários',
+    totalSocios: 'Total de sócios',
+    mensalidadeBaseManual: 'Taxa sobre faturamento',
+    taxaPessoalManual: 'Taxa sobre pessoal',
+  };
+  function markInvalid(id) {
+    var el = document.getElementById(id);
+    var field = el.closest('.field');
+    if (field) field.classList.add('invalid');
+    return FIELD_LABELS[id] || id;
+  }
+  function showErrorBanner(faltantes) {
+    var banner = document.getElementById('errorBanner');
+    if (faltantes.length === 1) {
+      banner.innerHTML = '<strong>Há um campo para revisar:</strong> ' + faltantes[0] + '.';
+    } else {
+      banner.innerHTML = '<strong>Há ' + faltantes.length + ' campos para revisar:</strong> ' + faltantes.join(', ') + '.';
+    }
+    banner.classList.add('show');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearInvalid();
+    $('errPlano').style.display = 'none';
+
+    var tipo = tipoAtual();
+    var ehHolding = (tipo === 'holding');
+    var regime = ehHolding ? '' : $('regime').value;
+    var ehLR = (regime === 'Lucro Real');
+    var ehSNLP = (regime === 'Simples Nacional' || regime === 'Lucro Presumido');
+
+    var dados = {
+      tipo: tipo,
+      numero: $('numero').value.trim(),
+      dataEmissao: $('dataEmissao').value,
+      validade: Number($('validade').value),
+      rep: $('rep').value.trim(),
+      empresa: $('empresa').value.trim(),
+      cnpj: cnpjInput.value,
+      regime: regime,
+      setor: ehSNLP ? $('setor').value : '',
+      atividade: $('atividade').value.trim(),
+      faturamento: Number($('faturamento').value) || 0,
+      totalFunc: Number($('totalFunc').value) || 0,
+      totalSocios: Number($('totalSocios').value) || 0,
+      fatorR: (regime === 'Simples Nacional') ? $('fatorR').checked : false,
+      mensalidadeBaseManual: Number($('mensalidadeBaseManual').value) || 0,
+      taxaPessoalManual: Number($('taxaPessoalManual').value) || 0,
+      planoId: ehHolding ? planoSelecionado : '',
+      observacoes: $('observacoes').value.trim(),
+    };
+
+    // ----- Validação comum (vale para os dois tipos) -----
+    var faltantes = [];
+    if (!dados.numero) faltantes.push(markInvalid('numero'));
+    if (!dados.dataEmissao) faltantes.push(markInvalid('dataEmissao'));
+    if (!dados.validade || dados.validade < 1 || dados.validade > 365) faltantes.push(markInvalid('validade'));
+    if (dados.rep.length < 3) faltantes.push(markInvalid('rep'));
+    if (dados.empresa.length < 3) faltantes.push(markInvalid('empresa'));
+    if (alnum(dados.cnpj).length !== 14) faltantes.push(markInvalid('cnpj'));
+    if (!dados.atividade) faltantes.push(markInvalid('atividade'));
+
+    // ----- Validação condicional -----
+    if (ehHolding) {
+      if (!dados.planoId) {
+        $('errPlano').style.display = 'block';
+        faltantes.push('Plano de holding');
+      }
+    } else {
+      if (!dados.regime) faltantes.push(markInvalid('regime'));
+      if (ehSNLP) {
+        if (!dados.setor) faltantes.push(markInvalid('setor'));
+        if (!dados.faturamento || dados.faturamento <= 0) faltantes.push(markInvalid('faturamento'));
+        if (dados.totalFunc < 0) faltantes.push(markInvalid('totalFunc'));
+        if (dados.totalSocios < 0) faltantes.push(markInvalid('totalSocios'));
+      } else if (ehLR) {
+        if (!dados.mensalidadeBaseManual || dados.mensalidadeBaseManual <= 0) faltantes.push(markInvalid('mensalidadeBaseManual'));
+        if (dados.taxaPessoalManual < 0) faltantes.push(markInvalid('taxaPessoalManual'));
+      }
+    }
+
+    if (faltantes.length > 0) {
+      showErrorBanner(faltantes);
+      document.getElementById('errorBanner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Gerando...';
+
+    google.script.run
+      .withSuccessHandler(function (res) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gerar link da proposta';
+        mostrarResultado(res, dados);
+      })
+      .withFailureHandler(function (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gerar link da proposta';
+        alert('Não foi possível gerar a proposta. Detalhes: ' + (err && err.message ? err.message : err));
+      })
+      .gerarLinkProposta(CFG.chave, dados);
+  });
+
+  // ====== Resultado ======
+  function mostrarResultado(res, dadosForm) {
+    var box = document.getElementById('resultBox');
+    document.getElementById('linkOut').value = res.url;
+    var subtxt = 'Proposta para ' + res.resumo.empresa + '. Copie o link abaixo e envie ao cliente.';
+    if (res.codigo) subtxt += ' Código ' + res.codigo + ' · válida até ' + res.validaAte + '.';
+    document.getElementById('resultSub').textContent = subtxt;
+
+    var rows = '';
+    if (res.resumo.ehHolding) {
+      (res.resumo.itens || []).forEach(function (f) {
+        rows += linha('✓ ' + f, '');
+      });
+      rows += '<div class="summary-row total"><span class="k">Plano ' + esc(res.resumo.planoNome) + ' — mensal</span><span class="v">R$ ' + esc(res.resumo.total) + '</span></div>';
+    } else {
+      (res.resumo.linhas || []).forEach(function (l) {
+        rows += linha(l.nome + (l.detalhe ? ' (' + l.detalhe + ')' : ''), l.valor);
+      });
+      rows += '<div class="summary-row total"><span class="k">Honorário mensal total</span><span class="v">R$ ' + esc(res.resumo.total) + '</span></div>';
+    }
+
+    document.getElementById('summaryBox').innerHTML = '<h3>Resumo</h3>' + rows;
+
+    box.classList.add('show');
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function linha(k, v) {
+    return '<div class="summary-row"><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + '</span></div>';
+  }
+
+  // ====== Copiar / Visualizar ======
+  document.getElementById('copyBtn').addEventListener('click', function () {
+    var input = document.getElementById('linkOut');
+    input.select();
+    input.setSelectionRange(0, 99999);
+    var fb = document.getElementById('copyFeedback');
+    try {
+      // navigator.clipboard pode falhar em iframes; fallback execCommand
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(input.value);
+      } else {
+        document.execCommand('copy');
+      }
+      fb.classList.add('show');
+      setTimeout(function () { fb.classList.remove('show'); }, 1800);
+    } catch (e) {
+      alert('Não foi possível copiar automaticamente. Selecione o texto e copie manualmente.');
+    }
+  });
+  document.getElementById('previewBtn').addEventListener('click', function () {
+    var url = document.getElementById('linkOut').value;
+    if (url) window.open(url, '_blank');
+  });
+
+  // ====== Reset ======
+  document.getElementById('resetBtn').addEventListener('click', function () {
+    if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+      form.reset();
+      clearInvalid();
+      document.getElementById('resultBox').classList.remove('show');
+      // Restaura defaults
+      var hoje = new Date();
+      $('dataEmissao').value =
+        hoje.getFullYear() + '-' + pad(hoje.getMonth() + 1, 2) + '-' + pad(hoje.getDate(), 2);
+      $('validade').value = 30;
+      $('totalFunc').value = 0;
+      $('totalSocios').value = 1;
+      var seq = Math.floor(Math.random() * 90 + 10);
+      $('numero').value =
+        hoje.getFullYear() + '-' + pad(hoje.getMonth() + 1, 2) + pad(hoje.getDate(), 2) + '-' + seq;
+      // Volta ao tipo honorários e limpa plano
+      var rHon = document.querySelector('input[name="tipo"][value="honorarios"]');
+      if (rHon) rHon.checked = true;
+      planoSelecionado = '';
+      $('errPlano').style.display = 'none';
+      renderPlanos();
+      atualizarVisibilidade();
+    }
+  });
+</script>
+
+</body>
+</html>
